@@ -1,42 +1,57 @@
+<!-- Lists the type of document, this is HTML -->
 <!DOCTYPE html>
+<!-- List the language as "en" english -->
 <html lang="en">
-
+<!-- Head element -->
 <head>
+  <!-- character set of UTF-8 -->
   <meta charset="UTF-8">
+  <!-- sets the viewport at an inital scale of 1.0, based off device width -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- microsoft browser still holding on by its fingernails -->
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+  <!-- Links bootstrap -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <!-- links to fontawesome -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+  <!-- title of page, displayed on tab -->
   <title>Weather Dashboard</title>
 </head>
-
+<!-- Body Element -->
 <body>
+  <!-- setting header bootstrap classes -->
   <header class="container-fluid text-center text-white bg-dark p-2">
+    <!-- h1 element, first header on page -->
     <h1>Weather Dashboard</h1>
   </header>
-
+  <!-- creates bootstrap container for initial search -->
   <div class="container-fluid">
     <div class="row">
+      <!-- I question the "aside" element here for web accessibiliy reasons, maybe list as "section" instead -->
       <aside class="col-lg-3 bg-light">
+        <!-- small header above search input -->
         <h5 class="mt-1">Search for a City:</h5>
         <div class="form-inline form-group">
+          <!-- input field -->
           <input class="form-control" type="text" id="search-value" />
+          <!-- search button -->
           <button class="btn btn-primary" id="search-button"> <i class="fa fa-search"></i> </button>
         </div>
-
+        <!-- beginning of unordered list -->
         <ul class="list-group history"></ul>
       </aside>
-
+      <!-- beginning of container for forecast information -->
       <div class="col-lg-9">
+        <!-- beginning of today -->
         <div id="today" class="mt-3"></div>
+        <!-- beginning of 5 day forecast  -->
         <div id="forecast" class="mt-3"></div>
       </div>
     </div>
   </div>
-
+  <!-- script tag for jQuery -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <!-- script tag linking script.js -->
   <script src="script.js"></script>
 </body>
 

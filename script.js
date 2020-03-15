@@ -100,19 +100,23 @@ $(document).ready(function() {
           // only look at forecasts around 3:00pm
           if (data.list[i].dt_txt.indexOf("15:00:00") !== -1) {
             // create html elements for a bootstrap card
+            // create div, add class of "col-md-2"
             var col = $("<div>").addClass("col-md-2");
+            // create div, add class "card, bg-primary, and text-white"
             var card = $("<div>").addClass("card bg-primary text-white");
+            // create div, add class "card-body and p-2"
             var body = $("<div>").addClass("card-body p-2");
-
+            // create h5 element, add class "card-title" and create text listing the date on the 5 day forecast
             var title = $("<h5>").addClass("card-title").text(new Date(data.list[i].dt_txt).toLocaleDateString());
-
+            // create img element, using the corresponding weather icon
             var img = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png");
-
+            // create a p element, adding class "card-text", then print the temperature in fahrenheit
             var p1 = $("<p>").addClass("card-text").text("Temp: " + data.list[i].main.temp_max + " °F");
+            // create a p element, adding class "card-text", then print the humidity percentage 
             var p2 = $("<p>").addClass("card-text").text("Humidity: " + data.list[i].main.humidity + "%");
-
             // merge together and put on page
             col.append(card.append(body.append(title, img, p1, p2)));
+            // using jQuery, search for forecast id and row class, append the information from line 118
             $("#forecast .row").append(col);
           }
         }
@@ -120,38 +124,49 @@ $(document).ready(function() {
     });
   }
 
+  // creates function "getUVIndex" with lat(itude) and lon(gitude) as arguments
   function getUVIndex(lat, lon) {
+    // fires off the AJAX (Asynchronus JavaScript and XML) call to the API, using "GET" to grab data in JSON format
     $.ajax({
       type: "GET",
+      // url to API + latitude and longitude
       url: "https://api.openweathermap.org/data/2.5/uvi?appid=600327cb1a9160fea2ab005509d1dc6d&lat=" + lat + "&lon=" + lon,
+      // selects dataType of JSON JavaScript Object Notation
       dataType: "json",
+      // if successful call, fire callback function with "data" as an argument
       success: function(data) {
+        // create p element, adding text "UV Index: "
         var uv = $("<p>").text("UV Index: ");
+        // create span element, adding classes "btn, btn-sm" and write text of data returned
         var btn = $("<span>").addClass("btn btn-sm").text(data.value);
         
         // change color depending on uv value
+        // less than 3 is low risk
         if (data.value < 3) {
           btn.addClass("btn-success");
         }
+        // 3 to 6 is medium risk
         else if (data.value < 7) {
           btn.addClass("btn-warning");
         }
+        // your face will melt off when the sun touches it
         else {
           btn.addClass("btn-danger");
         }
-        
+        // using jQuery, search for today id and card-body class, append uv and btn values
         $("#today .card-body").append(uv.append(btn));
       }
     });
   }
 
-  // get current history, if any
+  // get current history, if any (pulling from local storage)
   var history = JSON.parse(window.localStorage.getItem("history")) || [];
-
+  //  if the length of the history array is less than 0 fire the searchWeather function
   if (history.length > 0) {
     searchWeather(history[history.length-1]);
   }
-
+  // if the length of the history array is greater than i, iterate around that array firing the "makeRow" function with history index [i]. End when this has ran for each
+  // value in the history array
   for (var i = 0; i < history.length; i++) {
     makeRow(history[i]);
   }
