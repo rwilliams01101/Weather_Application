@@ -34,32 +34,46 @@ $(document).ready(function() {
       url: "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&appid=600327cb1a9160fea2ab005509d1dc6d&units=imperial",
       // selects dataType of JSON JavaScript Object Notation
       dataType: "json",
-      
+      // if successful call, fire callback function with "data" as an argument
       success: function(data) {
-        // create history link for this search
+        // callback function using data pulled from successful AJAX call
+        // if AJAX call is successful take the content of searchValue 
         if (history.indexOf(searchValue) === -1) {
+          // and push it into the "history" array
           history.push(searchValue);
+          // take the content of history and stringify (make separate items a string), set to local storage using setItem
           window.localStorage.setItem("history", JSON.stringify(history));
-    
+          // create a new row containing the value of searchValue
           makeRow(searchValue);
         }
-        
-        // clear any old content
+  
+        // clear any old content from the "today" id
         $("#today").empty();
 
         // create html content for current weather
+        // dynamically create h3 header and add class "card-title" for info card (shows selected city and info). Prints city name, current date
         var title = $("<h3>").addClass("card-title").text(data.name + " (" + new Date().toLocaleDateString() + ")");
+        // dynamically create div for the card and add class "card"
         var card = $("<div>").addClass("card");
+        // dynamically create p element, adding class "card-text" inside p element print wind speed in miles per hour
         var wind = $("<p>").addClass("card-text").text("Wind Speed: " + data.wind.speed + " MPH");
+        // dynamically create p element, adding class "card-text" inside p element print humidity percentage
         var humid = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity + "%");
+        // dynamically create p element, adding class "card-text" inside p element print temperature in fahrenheit
         var temp = $("<p>").addClass("card-text").text("Temperature: " + data.main.temp + " °F");
+        // dynamically create div element, adding class "card-body"
         var cardBody = $("<div>").addClass("card-body");
+        // dynamically create img element, set attribute to corresponding icon, pulled from open weather API
         var img = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.weather[0].icon + ".png");
 
         // merge and add to page
+        // append icon (from line above) to the h3 title
         title.append(img);
+        // append title temp humidity and wind speed to cardBody
         cardBody.append(title, temp, humid, wind);
+        // append cardBody to card
         card.append(cardBody);
+        // using jQuery, append the card to the "today" id
         $("#today").append(card);
 
         // call follow-up api endpoints
@@ -68,16 +82,19 @@ $(document).ready(function() {
       }
     });
   }
-  
+  // creates function "getForecast" with "searchValue" as an argument
   function getForecast(searchValue) {
+    // fires off the AJAX (Asynchronus JavaScript and XML) call to the API, using "GET" to grab data in JSON format
     $.ajax({
       type: "GET",
+      // url to API + searchValue + the app keys
       url: "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=600327cb1a9160fea2ab005509d1dc6d&units=imperial",
+      // selects dataType of JSON JavaScript Object Notation
       dataType: "json",
+      // if successful call, fire callback function with "data" as an argument
       success: function(data) {
         // overwrite any existing content with title and empty row
         $("#forecast").html("<h4 class=\"mt-3\">5-Day Forecast:</h4>").append("<div class=\"row\">");
-
         // loop over all forecasts (by 3-hour increments)
         for (var i = 0; i < data.list.length; i++) {
           // only look at forecasts around 3:00pm
@@ -106,7 +123,7 @@ $(document).ready(function() {
   function getUVIndex(lat, lon) {
     $.ajax({
       type: "GET",
-      url: "https://api.openweathermap.org/data/2.5/uvi?appid=7ba67ac190f85fdba2e2dc6b9d32e93c&lat=" + lat + "&lon=" + lon,
+      url: "https://api.openweathermap.org/data/2.5/uvi?appid=600327cb1a9160fea2ab005509d1dc6d&lat=" + lat + "&lon=" + lon,
       dataType: "json",
       success: function(data) {
         var uv = $("<p>").text("UV Index: ");
