@@ -25,6 +25,13 @@ $(document).ready(function() {
     $(".history").append(li);
   }
 
+    // NEW FEATURE - Clear button removes searches from "history" array. Also removes contents of ul element.
+    $("#clrBtn").on("click", function() {
+    // history.shift();
+    history.length = 0;
+    $('ul').empty() 
+    });
+
     // establishes "searchWather" function using "searchValue" as an argument
   function searchWeather(searchValue) {
     // fires off the AJAX (Asynchronus JavaScript and XML) call to the API, using "GET" to grab data in JSON format
@@ -123,6 +130,7 @@ $(document).ready(function() {
       }
     });
   }
+  
 
   // creates function "getUVIndex" with lat(itude) and lon(gitude) as arguments
   function getUVIndex(lat, lon) {
@@ -158,6 +166,9 @@ $(document).ready(function() {
       }
     });
   }
+
+
+
 
   // get current history, if any (pulling from local storage)
   var history = JSON.parse(window.localStorage.getItem("history")) || [];
